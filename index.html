@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Node js</title>
+</head>
+<body>
+    <ul id="messages"></ul>
+    <form action="">
+        <input type="text" autocomplete="off" id="message">
+        <button>Send</button>
+    </form>
+    <script src="//cdn.bootcss.com/socket.io/1.4.5/socket.io.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var socket=io();
+        $('form').submit(function () {
+            //通过input提交的值，将值直接传给chat.message频道
+            socket.emit('chat.message',$('#message').val());
+            //清空输入框
+            $('#message').val('');
+            return false;
+        });
+
+        //监听chat.message频道，将用户传到后台的信息分布发送到所有连接该频道的用户，并显示出来
+        socket.on('chat.message', function (message) {
+            $('#messages').append($('<li>').text(message));
+        });
+    </script>
+</body>
+</html>
